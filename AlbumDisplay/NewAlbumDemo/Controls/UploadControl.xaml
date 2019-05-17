@@ -1,0 +1,42 @@
+﻿<UserControl
+    x:Class="NewAlbumDemo.Controls.UploadControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:NewAlbumDemo.Controls"
+    xmlns:root="using:NewAlbumDemo"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="150"
+    d:DesignWidth="700">
+    <RelativePanel x:Name="upLoadPanel"  HorizontalAlignment="Stretch" BorderThickness="2" BorderBrush="AliceBlue">
+        <Image x:Name="tempImage" Stretch="Uniform" Width="200" Height="100" AutomationProperties.LabeledBy="{Binding ElementName=imageTitle}"/>
+        <TextBlock x:Name="imageTitle" TextWrapping="Wrap" Text="{x:Bind MyTextBox.Text, Mode=OneWay}" Tapped="imageTitle_Tapped" Style="{StaticResource TitleStyle}"
+                   RelativePanel.Below="tempImage" RelativePanel.AlignLeftWith="tempImage" RelativePanel.AlignRightWith="tempImage">
+                <FlyoutBase.AttachedFlyout>
+                <Flyout>
+                <TextBox x:Name="MyTextBox" Text="{x:Bind imageTitle.Text, Mode=OneTime}"/>
+                </Flyout>
+                </FlyoutBase.AttachedFlyout>
+        </TextBlock>
+        <ScrollViewer Width="700" x:Name="tempdescriptionScroll" ZoomMode="Disabled" IsTabStop="True"  RelativePanel.RightOf ="tempImage" 
+                      RelativePanel.AlignTopWith="tempImage" RelativePanel.AlignBottomWith="tempImage" 
+                      ScrollViewer.VerticalScrollBarVisibility="Auto" MaxHeight="120" Padding="0 0 0 20">
+            <TextBox  x:Name="descriptionTxt"  TextWrapping="Wrap" PlaceholderText="Please intput description"  TextAlignment="Left" />
+        </ScrollViewer>
+        <StackPanel Orientation="Horizontal" RelativePanel.Below="tempdescriptionScroll" RelativePanel.AlignLeftWith="tempdescriptionScroll" 
+                                    RelativePanel.AlignRightWith="tempdescriptionScroll">
+            <Button ToolTipService.ToolTip="click to add Label" x:Name="AddLabel" Click="AppBarButton_Click_AddLabel" Background="Transparent">
+                <FontIcon FontSize="14" Glyph="&#xE710;"/>
+            </Button>
+            <GridView x:Name="tempLabels" MaxWidth="650">
+                <GridView.ItemTemplate>
+                    <DataTemplate x:DataType="root:LabelItem">
+                        <TextBox  Text="{x:Bind value,Mode=TwoWay}"></TextBox>
+                    </DataTemplate>
+                </GridView.ItemTemplate>
+            </GridView>
+        </StackPanel>
+    </RelativePanel>
+
+</UserControl>

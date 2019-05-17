@@ -1,0 +1,93 @@
+﻿<Page
+    x:Class="NewAlbumDemo.MainPageLocal"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:NewAlbumDemo"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" x:Name="Scenario2Root">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*" />
+            <RowDefinition Height="10*" />
+            <RowDefinition Height="3*" />
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Vertical" Grid.Row="0">
+            <StackPanel Orientation="Horizontal" Grid.Row="0">
+                <TextBox x:Name="AddressBox"  Width="400" Text=""  PlaceholderText="Please input images Path" KeyUp="AddressBox_KeyUp" />
+                <!--https://hdwallsource.com/img/2014/8/"-->
+                <Button x:Name="selectDirectory" Click="selectDirectory_Click" ToolTipService.ToolTip="Select a local directory path">
+                    <FontIcon  FontFamily="Segoe MDL2 Assets " Glyph="&#xE773;" />
+                </Button>
+                <Button x:Name="GoBtn" Click="GoBtn_Click" ToolTipService.ToolTip="Load imageSource">
+                    <FontIcon  FontFamily="Segoe MDL2 Assets " Glyph="&#xE724;" />
+                </Button>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" x:Name="controlPanel">
+                <StackPanel Orientation="Horizontal" Margin="0,10,0,0" Visibility="{x:Bind IsWebPath,Mode=OneWay,Converter={StaticResource CollapsedIfTrue}}">
+                    <TextBox x:Name="selectIndexTxt"  Text="{Binding ElementName=flipView, Path=SelectedIndex,Mode=TwoWay,Converter={StaticResource SelectedIndexConverter} }" Style="{StaticResource NumDisplayStyle}"/>
+                    <FontIcon  FontSize="20" Glyph="&#xE8DB;" />
+                    <TextBox x:Name="sumCount" Text="" Style="{StaticResource NumDisplayStyle}" VerticalAlignment="Center" IsReadOnly="True" />
+                    <ProgressRing x:Name="ProgressControl1" Height="30" Width="30"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,10,0,0" Visibility="{x:Bind IsWebPath,Mode=OneWay,Converter={StaticResource VisibleIfTrue}}">
+                    <Button x:Name="NavigateBackButton" Content="Backward" Margin="0,0,10,0" Click="{x:Bind NavigateBackward_Click}" IsEnabled="False"/>
+                    <Button x:Name="NavigateForwardButton" Content="Forward" Margin="0,0,10,0" Click="{x:Bind NavigateForward_Click}" IsEnabled="False"/>
+                    <ProgressRing x:Name="ProgressControl" Height="30" Width="30"/>
+                </StackPanel>
+            </StackPanel>
+           
+        </StackPanel>
+
+        <Grid x:Name="webviewPanel" Grid.Row="1" BorderBrush="#FF707070" BorderThickness="1"  Height="400"  Visibility="{x:Bind IsWebPath,Mode=OneWay,Converter={StaticResource VisibleIfTrue}}">
+            <WebView x:Name="WebViewControl" 
+                     NavigationStarting="WebViewControl_NavigationStarting" ContentLoading="WebViewControl_ContentLoading"
+                     DOMContentLoaded="WebViewControl_DOMContentLoaded" UnviewableContentIdentified="WebViewControl_UnviewableContentIdentified"
+                     NavigationCompleted="WebViewControl_NavigationCompleted"/>
+        </Grid>
+        <StackPanel x:Name="FlipPanel" Orientation="Vertical" Grid.Row="1" Visibility="{x:Bind IsWebPath,Mode=OneWay,Converter={StaticResource CollapsedIfTrue}}">
+            <FlipView x:Name="flipView" HorizontalAlignment="Center" MaxHeight="400" >
+                <FlipView.ItemTemplate>
+                    <DataTemplate x:DataType="local:ModelAlbum" >
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock x:Name="photoCaption" Text="{x:Bind photoCaption}" Style="{StaticResource TitleStyle}"/>
+                            <Image Source="{x:Bind imageSource}" Tag="{x:Bind photoCaption}" Stretch="UniformToFill" MaxWidth="600" MaxHeight="400"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </FlipView.ItemTemplate>
+            </FlipView>
+            <!--<RelativePanel x:Name="thumbPanel">
+                    <RelativePanel.Resources>
+                        <local:SelectedIndexToBoolConverter x:Key="LeftselectedIndexToBoolConverter" itemCount="{x:Bind allCount}" controlName="leftArrow"/>
+                        <local:SelectedIndexToBoolConverter x:Key="RightselectedIndexToBoolConverter" itemCount="{x:Bind allCount}" controlName="rightArrow"/>
+                    </RelativePanel.Resources>
+                    <Button x:Name="leftArrow" Click="leftArrow_Click" RelativePanel.AlignLeftWithPanel="True" Height="100">
+                        <Button.IsEnabled>
+                            <Binding ElementName="flipView" Path="SelectedIndex" Converter="{StaticResource LeftselectedIndexToBoolConverter}" Mode="OneWay"/>
+                        </Button.IsEnabled>
+                        <FontIcon Glyph="&#xE76B;" FontSize="12" Width="10"/>
+                    </Button>
+                    <ScrollViewer x:Name="thumbsScroll"  IsTabStop="False" ZoomMode="Disabled" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Auto" RelativePanel.RightOf="leftArrow" RelativePanel.AlignTopWith="leftArrow" RelativePanel.AlignBottomWith="leftArrow" Margin="0  0 30 0">
+                        <GridView x:Name="thumbs" ItemsSource="{Binding ElementName=flipView,Path=ItemsSource,Mode=OneWay}" 
+                                        SelectedIndex="{Binding ElementName=flipView,Path=SelectedIndex,Mode=TwoWay}">
+                            <GridView.ItemTemplate>
+                                <DataTemplate x:DataType="local:ModelAlbum">
+                                    <Image Height="100" Width="100" Source="{Binding photoURL}"  ScrollViewer.BringIntoViewOnFocusChange="True"/>
+                                </DataTemplate>
+                            </GridView.ItemTemplate>
+                        </GridView>
+                    </ScrollViewer>
+                    <Button x:Name="rightArrow" Click="rightArrow_Click" IsEnabled="{Binding ElementName=flipView, Path=SelectedIndex, Converter={StaticResource RightselectedIndexToBoolConverter},Mode=OneWay}"  RelativePanel.AlignRightWithPanel="True" Height="100">
+                        <FontIcon Glyph="&#xE76C;"  FontSize="12" Width="10"/>
+                    </Button>
+                </RelativePanel>-->
+        </StackPanel>
+        <ScrollViewer x:Name="logScroller" Grid.Row="2"
+                      BorderBrush="#FF707070" BorderThickness="1"
+                      VerticalScrollBarVisibility="Auto" Margin="0,10,0,0">
+            <TextBlock x:Name="logResults" TextWrapping="Wrap"/>
+        </ScrollViewer>
+            
+    </Grid>
+</Page>

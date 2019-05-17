@@ -1,0 +1,34 @@
+﻿<Page
+    x:Class="NewAlbumDemo.HubControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:NewAlbumDemo"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <HyperlinkButton x:Name="GotoMainPage" Click="GotoMainPage_Click" Content="GotoMainPage"/>
+        <Hub Header="AppBarButton" Orientation="Vertical" Grid.Row="1">
+            <HubSection Header="Admin">
+                <DataTemplate>
+                    <AppBarButton Icon="Admin" ></AppBarButton>
+                </DataTemplate>
+            </HubSection>
+            <HubSection Header="Second" IsHeaderInteractive="True" RequestedTheme="Dark" Background="#222">
+                <DataTemplate>
+                    <AppBarButton Icon="Account"/>
+                </DataTemplate>
+            </HubSection>
+            <HubSection Header="NineGridImage" >
+                <DataTemplate>
+                    <Image Source="/Assets/Images/step4.png" NineGrid="2,3,3,2" Stretch="Uniform" Width="200" Height="200"/>
+                </DataTemplate>
+            </HubSection>
+        </Hub>
+    </Grid>
+</Page>

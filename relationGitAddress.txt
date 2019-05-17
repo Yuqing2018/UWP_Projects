@@ -1,0 +1,4 @@
+An_UWP_Radial_Gauge_Control£º https://github.com/XamlBrewer/UWP-Composition-Radial-Gauge.git
+open-xml sdk : https://github.com/OfficeDev/Open-XML-SDK.git
+UWP_Tookit_CommLibray: https://github.com/LeoLeeCN/UWP_ToolKit_CommonLibrary.git 
+Win2D : https://github.com/Microsoft/Win2D.git

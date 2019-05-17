@@ -1,0 +1,70 @@
+﻿<UserControl
+    x:Class="NewAlbumDemo.Controls.fliTodoControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:NewAlbumDemo.Controls"
+    xmlns:root="using:NewAlbumDemo"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="400">
+    <RelativePanel x:Name="photoPane1">
+      <VisualStateManager.VisualStateGroups>
+        <VisualStateGroup>
+          <VisualState>
+            <VisualState.StateTriggers>
+              <AdaptiveTrigger MinWindowWidth="750" />
+            </VisualState.StateTriggers>
+            <VisualState.Setters>
+                        <Setter Target="photoBorder.Height" Value="400" />
+                        <Setter Target="descriptionScroll.(RelativePanel.RightOf)" Value="photoBorder" />
+                        <Setter Target="descriptionScroll.(RelativePanel.AlignTopWith)" Value="photoBorder" />
+                        <Setter Target="descriptionScroll.(RelativePanel.AlignBottomWith)" Value="photoBorder" />
+                        <Setter Target="descriptionScroll.(RelativePanel.Below)" Value="" />
+                        <Setter Target="descriptionScroll.(RelativePanel.AlignLeftWith)" Value="" />
+                        <Setter Target="descriptionScroll.(RelativePanel.AlignRightWith)" Value="" />
+                        <Setter Target="descriptionScroll.Margin" Value="20 0 0 0 " />
+                        <Setter Target="descriptionScroll.MaxHeight" Value="400" />
+                        <!--<Setter Target="photoDescription.TextTriming" Value="" />-->
+                    </VisualState.Setters>
+          </VisualState>
+        </VisualStateGroup>
+      </VisualStateManager.VisualStateGroups>
+        <Border x:Name="photoBorder" Height="300" Width="700" Background="{StaticResource HomePageBackgroundBrush}" RelativePanel.AlignLeftWithPanel="True">
+      <Image x:Name="photo" Source="{Binding photoURL}" MaxHeight="{Binding Path=photoBorder.Height,Mode=OneWay}" MaxWidth="{Binding Path=photoBorder.Width,Mode=OneWay}"  Stretch="Uniform" HorizontalAlignment="Center"/>
+</Border>
+        <ScrollViewer Padding="0 0 20 0" x:Name="descriptionScroll" ZoomMode="Disabled" IsTabStop="False"  RelativePanel.Below="photoBorder" 
+                      RelativePanel.AlignLeftWith="photoBorder" RelativePanel.AlignRightWith="photoBorder" BorderThickness="{StaticResource ProgressBarBorderThemeThickness}" BorderBrush="{StaticResource SearchBoxBorderBrush}"  ScrollViewer.VerticalScrollBarVisibility="Auto">
+            <TextBlock TextWrapping="Wrap" x:Name="photoDescription" Text="{Binding photoDescription,Mode=OneWay}" />
+        </ScrollViewer>
+        <StackPanel x:Name="LabelPa" Orientation="Horizontal" RelativePanel.Below="descriptionScroll" RelativePanel.AlignLeftWith="photoBorder" RelativePanel.AlignRightWith="descriptionScroll">
+        <TextBlock Style="{StaticResource TitleStyle}"  Text="All Labels:"/>
+        <GridView  x:Name="allMarks" ItemsSource="{Binding labels}" MaxWidth="700">
+                <!--<GridView.ItemContainerStyle>
+                    <Style TargetType="GridViewItem">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="GridViewItem">
+                                    <GridViewItemPresenter Foreground="Black"
+                                                           Background="Red"
+                                                           SelectedBackground="white"
+                                                           SelectedForeground="Red"
+                                                           FocusBorderBrush="AliceBlue"/>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </GridView.ItemContainerStyle>-->
+          <GridView.ItemTemplate >              
+                    <DataTemplate x:DataType="root:LabelItem">
+                        <Border Background="{StaticResource AppBarBackgroundThemeBrush}" Style="{StaticResource LabelStyle}">
+                            <TextBlock x:Name="labelTextBox" Text="{x:Bind Path=value}" HorizontalTextAlignment="Center" Margin="5 0 5 0" MinWidth="80"/>
+                        </Border>
+                    </DataTemplate>
+                </GridView.ItemTemplate>
+        </GridView>
+      </StackPanel>
+
+    </RelativePanel>
+</UserControl>

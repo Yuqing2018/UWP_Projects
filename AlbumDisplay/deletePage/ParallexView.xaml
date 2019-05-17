@@ -1,0 +1,36 @@
+﻿<Page
+    x:Class="NewAlbumDemo.ParallexView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:NewAlbumDemo"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <StackPanel>
+        <HyperlinkButton  Content="MainPage" Click="HyperlinkButton_Click" HorizontalAlignment="Center" x:Name="GotoMainPage" />
+
+        <!--<Grid>
+            <ParallaxView Source="{Binding ElementName=listView}" VerticalShift="2000">
+                <Image Source="ms-appx:///Assets/images/backgroundPhoto.jpg" />
+            </ParallaxView>
+            <ListView x:Name="listView" ItemsSource="{x:Bind Items}" Visibility="Visible" >
+                <ListView.Header>
+                    <Grid>
+                        <ParallaxView Source="{Binding ElementName=listView}" VerticalShift="100"
+VerticalSourceOffsetKind="Absolute" VerticalSourceStartOffset="-50"
+VerticalSourceEndOffset="50">
+                            <Image Source="ms-appx:///Assets/images/backgroundPhoto.jpg" />
+                        </ParallaxView>
+                        <TextBlock Text="Scroll the list to see parallaxing of images" FontSize="20" HorizontalAlignment="Center"/>
+                    </Grid>
+                </ListView.Header>
+            </ListView>
+
+        </Grid>-->
+        <ScrollViewer Height="370" ZoomMode="Enabled" IsVerticalScrollChainingEnabled="True" 
+ HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" HorizontalScrollMode="Enabled" VerticalScrollMode="Enabled">
+            <Image Source="ms-appx:///Assets/images/backgroundPhoto.jpg" Stretch="None" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        </ScrollViewer>
+    </StackPanel>
+</Page>

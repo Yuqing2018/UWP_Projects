@@ -1,0 +1,90 @@
+﻿<Page
+    x:Class="NewAlbumDemo.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:NewAlbumDemo"
+    xmlns:controls="using:NewAlbumDemo.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="600"
+    d:DesignWidth="700">
+    <StackPanel Orientation="Vertical" Background="{ThemeResource HomePageBackgroundBrush}" MaxHeight="700" ScrollViewer.VerticalScrollBarVisibility="Auto">
+        <StackPanel Orientation="Horizontal" BorderThickness="2" BorderBrush="{StaticResource AppBarBorderThemeBrush}" HorizontalAlignment="Stretch" Background="{ThemeResource AppBarBackgroundThemeBrush}">
+            <CommandBar x:Name="commanderBar" IsOpen="False" DefaultLabelPosition="Right" Background="{ThemeResource AppBarBackgroundThemeBrush}">
+                <AppBarButton Icon="Upload" Label="Upload" x:Name="AddPhotoBtn" Click="AddPicture_Click" 
+                              AutomationProperties.Name="upload button" AutomationProperties.HelpText="a button used to upload a local image file"/>
+                <AppBarSeparator />
+                <AppBarButton Icon="Edit" Label="EditLabels" Click="AppBarButton_Click_EditLabel" AutomationProperties.Name="a button used to edit tags of the current image" />
+                <AppBarSeparator />
+                <AppBarButton Icon="Delete" Label="Delete Image" AutomationProperties.Name="a appbarbutton used to delete the current image">
+                    <Button.Flyout>
+                        <Flyout>
+                            <StackPanel>
+                                <TextBlock Style="{ThemeResource BaseTextBlockStyle}" Text="Are you sure you want to delete the picture?" Margin="0,0,0,12" />
+                                <Button Click="DeletePhoto_Click" Content="Yes" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Flyout>
+                    </Button.Flyout>
+                </AppBarButton>
+                <AppBarButton x:Name="GotoHome" Icon="Refresh" Label="Refresh" Click="GotoHome_Click" Width="100"/>
+                <AppBarSeparator />
+                </CommandBar>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Background="{ThemeResource AppBarBackgroundThemeBrush}">
+                <TextBox x:Name="selectIndexTxt"  Text="{Binding ElementName=flipView, Path=SelectedIndex,Mode=TwoWay,Converter={StaticResource SelectedIndexConverter} }" Style="{StaticResource NumDisplayStyle}"/>
+                <FontIcon  FontSize="20" Glyph="&#xE8DB;"/>
+                <TextBox x:Name="sumCount" Text="{x:Bind allCount}" Style="{StaticResource NumDisplayStyle}" VerticalAlignment="Center" IsReadOnly="True" />
+            </StackPanel>
+        </StackPanel>
+        <StackPanel x:Name="uploadBtn"  Orientation="Vertical" Visibility="Collapsed">
+            <controls:UploadControl x:Name="uploadControl"/>
+            <Button x:Name="BtnSave" Click="BtnSaveFile_Click"  Content="SaveImage"  HorizontalAlignment="Center" Margin="0"/>
+        </StackPanel>
+        <StackPanel x:Name="FlipPanel" Orientation="Vertical">
+            <FlipView x:Name="flipView" HorizontalAlignment="Center" Padding="20 0" MaxHeight="500" SelectionChanged="selectIndex_Changed" >
+                <FlipView.ItemTemplate>
+                    <DataTemplate x:DataType="local:ModelAlbum" >
+                        <ScrollViewer x:Name="itemRoot" ZoomMode="Disabled" IsTabStop="True" MaxHeight="500" >
+                            <StackPanel Orientation="Vertical" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                                <TextBlock x:Name="photoCaption" Text="{x:Bind photoCaption}" Style="{StaticResource TitleStyle}"  Margin="0 5 0 10" HorizontalAlignment="Center" />
+                                <controls:fliTodoControl x:Name="flipControl"/>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </DataTemplate>
+                </FlipView.ItemTemplate>
+                <FlipView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch"></StackPanel>
+                    </ItemsPanelTemplate>
+                </FlipView.ItemsPanel>
+            </FlipView>
+        <RelativePanel x:Name="thumbPanel">
+                <RelativePanel.Resources>
+                    <local:SelectedIndexToBoolConverter x:Key="LeftselectedIndexToBoolConverter" itemCount="{x:Bind allCount}" controlName="leftArrow"/>
+                    <local:SelectedIndexToBoolConverter x:Key="RightselectedIndexToBoolConverter" itemCount="{x:Bind allCount}" controlName="rightArrow"/>
+                </RelativePanel.Resources>
+                <Button x:Name="leftArrow" Click="leftArrow_Click" RelativePanel.AlignLeftWithPanel="True" Height="100">
+                    <!--//IsEnabled="{Binding ElementName=flipView, Path=SelectedIndex,Converter={StaticResource SelectedIndexToBoolConverter},ConverterParameter='leftArrow' ,Mode=OneWay}"-->
+                    <Button.IsEnabled>
+                        <Binding ElementName="flipView" Path="SelectedIndex" Converter="{StaticResource LeftselectedIndexToBoolConverter}" Mode="OneWay"/>
+                    </Button.IsEnabled>
+                    <FontIcon Glyph="&#xE76B;" FontSize="12" Width="10"/>
+                </Button>
+                <ScrollViewer x:Name="thumbsScroll"  IsTabStop="False" ZoomMode="Disabled" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Auto" RelativePanel.RightOf="leftArrow" RelativePanel.AlignTopWith="leftArrow" RelativePanel.AlignBottomWith="leftArrow" Margin="0  0 30 0">
+                <GridView x:Name="thumbs" ItemsSource="{Binding ElementName=flipView,Path=ItemsSource,Mode=OneWay}" 
+                                        SelectedIndex="{Binding ElementName=flipView,Path=SelectedIndex,Mode=TwoWay}">
+                        <GridView.ItemTemplate>
+                            <DataTemplate x:DataType="local:ModelAlbum">
+                                <Image Height="100" Width="100" Source="{Binding photoURL}"  ScrollViewer.BringIntoViewOnFocusChange="True"/>
+                            </DataTemplate>
+                        </GridView.ItemTemplate>
+                    </GridView>
+            </ScrollViewer>
+                <Button x:Name="rightArrow" Click="rightArrow_Click" IsEnabled="{Binding ElementName=flipView, Path=SelectedIndex, Converter={StaticResource RightselectedIndexToBoolConverter},Mode=OneWay}"  RelativePanel.AlignRightWithPanel="True" Height="100">
+                    <FontIcon Glyph="&#xE76C;"  FontSize="12" Width="10"/>
+                </Button>
+            </RelativePanel>
+        </StackPanel>
+    </StackPanel>
+   
+</Page>

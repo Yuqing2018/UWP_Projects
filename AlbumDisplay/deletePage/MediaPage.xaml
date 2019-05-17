@@ -1,0 +1,24 @@
+﻿<Page
+    x:Class="NewAlbumDemo.MediaPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:NewAlbumDemo"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <StackPanel Orientation="vertical" >
+        <HyperlinkButton Content="GotoMainPage" x:Name="GotoMainPage" Click="HyperlinkButton_Click" />
+        <Button Content="Show Popup" Click="ShowPopupClicked"/>
+        <Popup x:Name="mediaPlayerPopup">
+            <StackPanel Height="700" Width="400" Background="Blue">
+                <MediaElement x:Name="mediaPlayer" 
+                  AreTransportControlsEnabled="True" 
+                  Source="Medias/13ee.mp4"/>
+                <TextBlock Text="Simple Popup"/>
+                <Button Content="Close" Click="ClosePopupClicked"/>
+            </StackPanel>
+        </Popup>
+
+    </StackPanel>
+</Page>
